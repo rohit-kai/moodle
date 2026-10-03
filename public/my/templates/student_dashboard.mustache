@@ -1,0 +1,625 @@
+{{!
+    Student / Learner Dashboard rendered for students on the my moodle page.
+
+    @package my
+    @copyright 2026
+    @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+}}
+<style>
+    /* Aesthetic Professional Theme - Student Dashboard */
+    body#page-my-index #page,
+    body#page-my-index #page-content,
+    body#page-my-index #region-main,
+    body#page-my-index .main-inner {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .student-dashboard {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: #1e293b;
+    }
+
+    /* Executive Charcoal / Slate Header Banner */
+    .student-header-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.1);
+        border: 1px solid #334155;
+    }
+    .student-header-card h3 {
+        color: #ffffff !important;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+    .student-header-card p {
+        color: #94a3b8 !important;
+        font-size: 0.9rem;
+    }
+
+    /* Professional Navigation Tabs */
+    .student-nav-tabs .nav-link {
+        color: #94a3b8;
+        border: none;
+        border-bottom: 2px solid transparent;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 0.65rem 1.15rem;
+        transition: all 0.2s ease;
+    }
+    .student-nav-tabs .nav-link:hover {
+        color: #f8fafc;
+        border-bottom-color: #475569;
+    }
+    .student-nav-tabs .nav-link.active {
+        color: #ffffff !important;
+        background: transparent !important;
+        border-bottom-color: #3b82f6 !important;
+    }
+
+    /* Cards & Widgets */
+    .student-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.65rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .student-card:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+    .student-card-header {
+        background-color: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        color: #0f172a;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    /* Stat Cards */
+    .stat-card-pro {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-top: 3px solid #2563eb;
+        border-radius: 0.65rem;
+        padding: 0.9rem 1rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+    }
+    .stat-card-pro .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1.2;
+    }
+    .stat-card-pro .stat-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-top: 0.25rem;
+    }
+
+    /* Buttons */
+    .btn-pro-primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 0.45rem 1rem;
+        border-radius: 0.4rem;
+        transition: all 0.15s ease;
+    }
+    .btn-pro-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+        color: #ffffff !important;
+    }
+
+    .btn-pro-outline {
+        border: 1px solid #cbd5e1;
+        color: #334155 !important;
+        background-color: #ffffff;
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 0.45rem 1rem;
+        border-radius: 0.4rem;
+        transition: all 0.15s ease;
+    }
+    .btn-pro-outline:hover {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+        color: #0f172a !important;
+    }
+
+    .btn-banner-outline {
+        border: 1px solid #475569;
+        color: #f8fafc !important;
+        background-color: rgba(255, 255, 255, 0.05);
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 0.45rem 1rem;
+        border-radius: 0.4rem;
+        transition: all 0.15s ease;
+    }
+    .btn-banner-outline:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff !important;
+        border-color: #94a3b8;
+    }
+
+    /* Badges */
+    .badge-pro-soft {
+        background-color: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.35rem;
+    }
+    .badge-pro-success {
+        background-color: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.35rem;
+    }
+    .badge-pro-warning {
+        background-color: #fffbeb;
+        color: #b45309;
+        border: 1px solid #fde68a;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.35rem;
+    }
+    .badge-pro-info {
+        background-color: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #bfdbfe;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.35rem;
+    }
+
+    .student-progress {
+        height: 6px;
+        background-color: #f1f5f9;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    .student-progress .progress-bar {
+        background-color: #2563eb;
+    }
+</style>
+
+<div class="student-dashboard mb-4 w-100" data-region="student-dashboard">
+
+    <!-- Executive Student Header Banner -->
+    <div class="card student-header-card mb-3 border-0">
+        <div class="card-body pb-0 pt-4 px-3 px-md-4">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="p-3 rounded-circle bg-white bg-opacity-10 text-white d-none d-sm-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                        {{#pix}}i/user,core{{/pix}}
+                    </div>
+                    <div>
+                        <h3 class="h4 mb-1">
+                            Student Learning Portal - Welcome, {{studentname}} 👋
+                        </h3>
+                        <p class="mb-0">Access your personal courses, submit assignments, track daily attendance, and view study materials.</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{mycourses_url}}" class="btn btn-pro-primary btn-sm px-3 py-2 d-inline-flex align-items-center gap-2">
+                        {{#pix}}i/course,core{{/pix}} <span>My Enrolled Courses</span>
+                    </a>
+                    <a href="{{messages_url}}" class="btn btn-banner-outline btn-sm px-3 py-2 d-inline-flex align-items-center gap-1">
+                        {{#pix}}t/message,core{{/pix}} Group Chat & Teacher Contact
+                    </a>
+                </div>
+            </div>
+
+            <!-- Student Navigation Tabs -->
+            <ul class="nav student-nav-tabs border-bottom-0 gap-1" id="studentDashNav" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active d-inline-flex align-items-center gap-2" id="tab-scourses-link" data-bs-toggle="tab" href="#dash-scourses" role="tab" aria-controls="dash-scourses" aria-selected="true">
+                        {{#pix}}i/course,core{{/pix}} <span>Enrolled Courses</span>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link d-inline-flex align-items-center gap-2" id="tab-sassignments-link" data-bs-toggle="tab" href="#dash-sassignments" role="tab" aria-controls="dash-sassignments" aria-selected="false">
+                        {{#pix}}i/file_plus,core{{/pix}} <span>Assignments & Submit Work</span>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link d-inline-flex align-items-center gap-2" id="tab-sattendance-link" data-bs-toggle="tab" href="#dash-sattendance" role="tab" aria-controls="dash-sattendance" aria-selected="false">
+                        {{#pix}}i/calendar,core{{/pix}} <span>My Attendance ("Presenty")</span>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link d-inline-flex align-items-center gap-2" id="tab-smaterials-link" data-bs-toggle="tab" href="#dash-smaterials" role="tab" aria-controls="dash-smaterials" aria-selected="false">
+                        {{#pix}}i/file,core{{/pix}} <span>Study Files & Links</span>
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link d-inline-flex align-items-center gap-2" id="tab-sgrades-link" data-bs-toggle="tab" href="#dash-sgrades" role="tab" aria-controls="dash-sgrades" aria-selected="false">
+                        {{#pix}}i/grades,core{{/pix}} <span>My Gradebook & Notices</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MAIN 2-COLUMN LAYOUT -->
+    <div class="row g-3">
+
+        <!-- LEFT COLUMN: MAIN LEARNER CONTENT (8 Cols) -->
+        <div class="col-12 col-xl-9 col-lg-8">
+
+            <!-- Personal Learning Metrics -->
+            <div class="row g-2 g-md-3 mb-3">
+                <div class="col-6 col-md-3">
+                    <div class="stat-card-pro text-center">
+                        <div class="stat-value">{{stats.enrolled_count}}</div>
+                        <div class="stat-label">Enrolled Courses</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card-pro text-center" style="border-top-color: #3b82f6;">
+                        <div class="stat-value">{{stats.completed_activities}}</div>
+                        <div class="stat-label">Completed Tasks</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card-pro text-center" style="border-top-color: #059669;">
+                        <div class="stat-value">{{stats.attendance_rate}}</div>
+                        <div class="stat-label">Daily Attendance</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-card-pro text-center" style="border-top-color: #475569;">
+                        <div class="stat-value">{{stats.avg_score}}</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="studentDashTabContent">
+
+                <!-- TAB 1: ENROLLED COURSES -->
+                <div class="tab-pane fade show active" id="dash-scourses" role="tabpanel" aria-labelledby="tab-scourses-link">
+                    <div class="card student-card">
+                        <div class="card-header student-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+                            <span>{{#pix}}i/course,core{{/pix}} My Active Courses & Learning Progress</span>
+                            <a href="{{mycourses_url}}" class="small text-primary font-weight-bold text-decoration-none">View All Courses &rarr;</a>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row g-3">
+                                {{#enrolled_courses}}
+                                <div class="col-12 col-md-6">
+                                    <div class="card h-100 border shadow-sm" style="border-color: #e2e8f0 !important;">
+                                        <div class="card-header bg-white fw-bold py-2 d-flex align-items-center justify-content-between border-bottom" style="border-color: #f1f5f9 !important;">
+                                            <span class="text-truncate text-dark" style="max-width: 75%;">{{fullname}}</span>
+                                            <span class="badge badge-pro-success">{{progress}}%</span>
+                                        </div>
+                                        <div class="card-body py-3 px-3 d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="small text-muted mb-2">Category: <strong class="text-secondary">{{categoryname}}</strong></div>
+                                                <div class="progress student-progress mb-3">
+                                                    <div class="progress-bar" role="progressbar" style="width: {{progress}}%;" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 mt-2">
+                                                <a href="{{courseurl}}" class="btn btn-pro-primary btn-sm w-100">Continue Learning</a>
+                                                <a href="{{gradeurl}}" class="btn btn-pro-outline btn-sm">Grades</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/enrolled_courses}}
+                                {{^enrolled_courses}}
+                                <div class="col-12 text-center text-muted py-4">
+                                    You are not currently enrolled in any active courses.
+                                </div>
+                                {{/enrolled_courses}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: ASSIGNMENTS & SUBMIT WORK -->
+                <div class="tab-pane fade" id="dash-sassignments" role="tabpanel" aria-labelledby="tab-sassignments-link">
+                    <div class="card student-card">
+                        <div class="card-header student-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+                            <span>{{#pix}}i/file_plus,core{{/pix}} Pending Assignments & File Submission Center</span>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row g-3">
+                                {{#assignments}}
+                                <div class="col-12">
+                                    <div class="card border p-3 shadow-sm" style="border-color: #e2e8f0 !important; border-left: 4px solid #2563eb !important;">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                                            <div>
+                                                <h6 class="fw-bold text-dark mb-1">{{title}}</h6>
+                                                <div class="small text-muted">Course: <strong>{{coursename}}</strong> &bull; Assigned by: <strong>{{teacher}}</strong></div>
+                                            </div>
+                                            <div>
+                                                <span class="badge {{badge_class}}">{{status}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between pt-2 border-top gap-2" style="border-color: #f1f5f9 !important;">
+                                            <div class="small text-secondary">
+                                                <span><strong>Due Date:</strong> {{duedate}}</span> &bull; 
+                                                <span><strong>Allowed Files:</strong> {{file_types}}</span>
+                                            </div>
+                                            <div>
+                                                {{#is_pending}}
+                                                <button class="btn btn-pro-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#submitAssignmentModal{{id}}" onclick="openSubmitModal('{{title}}')">
+                                                    📤 Upload & Submit File
+                                                </button>
+                                                {{/is_pending}}
+                                                {{^is_pending}}
+                                                <span class="badge badge-pro-success">Grade: {{score}}</span>
+                                                {{/is_pending}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/assignments}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: DAILY ATTENDANCE ("PRESENTY") -->
+                <div class="tab-pane fade" id="dash-sattendance" role="tabpanel" aria-labelledby="tab-sattendance-link">
+                    <div class="card student-card">
+                        <div class="card-header student-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+                            <span>{{#pix}}i/calendar,core{{/pix}} Personal Attendance & Daily Presenty Tracker</span>
+                            <span class="badge badge-pro-success">Overall: {{attendance.overall_percent}}</span>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row g-3 mb-4">
+                                <div class="col-12 col-md-6">
+                                    <div class="p-3 border rounded text-center bg-light">
+                                        <div class="small text-muted font-weight-bold uppercase mb-1">Today's Attendance Status</div>
+                                        <div class="h5 fw-bold text-success mb-0">✓ {{attendance.status_today}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="p-3 border rounded text-center bg-light">
+                                        <div class="small text-muted font-weight-bold uppercase mb-1">Sessions Present</div>
+                                        <div class="h5 fw-bold text-dark mb-0">{{attendance.present_days}} / {{attendance.total_days}} Total Days</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6 class="fw-bold text-dark mb-2">Recent Weekly Attendance Logs (Marked by Faculty)</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0 border">
+                                    <thead style="background-color: #f8fafc;">
+                                        <tr>
+                                            <th class="py-2 px-3">Day</th>
+                                            <th class="py-2">Date</th>
+                                            <th class="py-2 text-end px-3">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#attendance.recent_logs}}
+                                        <tr>
+                                            <td class="fw-semibold text-dark py-2 px-3">{{day}}</td>
+                                            <td class="text-muted py-2">{{date}}</td>
+                                            <td class="text-end py-2 px-3"><span class="badge {{badge_class}}">{{status}}</span></td>
+                                        </tr>
+                                        {{/attendance.recent_logs}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: STUDY MATERIALS & SHARED LINKS -->
+                <div class="tab-pane fade" id="dash-smaterials" role="tabpanel" aria-labelledby="tab-smaterials-link">
+                    <div class="card student-card">
+                        <div class="card-header student-card-header py-2 px-3">
+                            <span>{{#pix}}i/file,core{{/pix}} Course Study Files, Documents & Faculty Web Links</span>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {{#study_materials}}
+                            <div class="list-group-item p-3 border-bottom" style="border-color: #f1f5f9 !important;">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <h6 class="fw-bold mb-0 text-dark">{{title}}</h6>
+                                    <span class="badge badge-pro-soft">{{type}}</span>
+                                </div>
+                                <div class="small text-muted mb-2">Course: <strong>{{coursename}}</strong> &bull; Shared by: <strong>{{postedby}}</strong> &bull; {{date}}</div>
+                                <div>
+                                    <a href="{{url}}" class="btn btn-pro-outline btn-sm py-1 px-3 d-inline-flex align-items-center gap-1">
+                                        📥 Access / Download Study File ({{detail}})
+                                    </a>
+                                </div>
+                            </div>
+                            {{/study_materials}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: MY GRADEBOOK & READ-ONLY NOTICES -->
+                <div class="tab-pane fade" id="dash-sgrades" role="tabpanel" aria-labelledby="tab-sgrades-link">
+                    <div class="card student-card mb-3">
+                        <div class="card-header student-card-header py-2 px-3">
+                            <span>{{#pix}}i/grades,core{{/pix}} My Personal Gradebook Overview</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm align-middle mb-0">
+                                <thead style="background-color: #f8fafc; color: #475569;">
+                                    <tr>
+                                        <th class="py-2 px-3">Graded Item / Assessment</th>
+                                        <th class="py-2">Course</th>
+                                        <th class="py-2">Score</th>
+                                        <th class="py-2 text-end px-3">Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#student_grades}}
+                                    <tr>
+                                        <td class="fw-semibold text-dark py-2 px-3">{{itemname}}</td>
+                                        <td class="py-2"><span class="badge badge-pro-soft">{{coursename}}</span></td>
+                                        <td class="fw-bold text-dark py-2">{{score}}</td>
+                                        <td class="text-end py-2 px-3"><span class="badge {{badge_class}}">{{percentage}}</span></td>
+                                    </tr>
+                                    {{/student_grades}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Read-Only Class Announcements -->
+                    <div class="card student-card">
+                        <div class="card-header student-card-header py-2 px-3">
+                            <span>{{#pix}}i/notifications,core{{/pix}} Class Announcements (Read Only)</span>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            {{#class_notices}}
+                            <div class="list-group-item p-3 border-bottom" style="border-color: #f1f5f9 !important;">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <h6 class="fw-bold mb-0 text-dark">{{title}}</h6>
+                                    <span class="badge badge-pro-soft">{{timeago}}</span>
+                                </div>
+                                <div class="small text-muted mb-2">Posted by: <strong class="text-secondary">{{postedby}}</strong></div>
+                                <p class="small text-secondary mb-0">{{content}}</p>
+                            </div>
+                            {{/class_notices}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: SIDEBAR WIDGETS (4 Cols) -->
+        <div class="col-12 col-xl-3 col-lg-4">
+
+            <!-- WIDGET 1: Quick Access Links -->
+            <div class="card student-card mb-3">
+                <div class="card-header student-card-header py-2 px-3">
+                    Student Navigation
+                </div>
+                <div class="list-group list-group-flush small">
+                    <a href="{{mycourses_url}}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3">
+                        <span>{{#pix}}i/course,core{{/pix}} My Enrolled Courses</span>
+                        <span class="text-secondary">&rarr;</span>
+                    </a>
+                    <a href="{{messages_url}}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3">
+                        <span>{{#pix}}t/message,core{{/pix}} Group Chat & Faculty Messages</span>
+                        <span class="text-secondary">&rarr;</span>
+                    </a>
+                    <a href="{{profile_url}}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-3">
+                        <span>{{#pix}}i/user,core{{/pix}} My Personal Profile</span>
+                        <span class="text-secondary">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- WIDGET 2: Notice for Student Permissions -->
+            <div class="card student-card border-0 bg-light p-3">
+                <div class="small text-muted">
+                    <strong class="text-dark">🔒 Student Access Level:</strong> You are logged in as a Student. You have read-only access to announcements & study files, and can submit your assignments & track attendance.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Student Interactive File Submission Simulation Modal -->
+<div class="modal fade" id="studentFileSubmitModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title h6 fw-bold" id="modalAssignmentTitle">Submit Assignment File</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <form id="studentFileSubmitForm">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Select File to Upload (PDF, DOCX, ZIP)</label>
+                        <input type="file" class="form-control form-control-sm" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary">Submission Comments (Optional)</label>
+                        <textarea class="form-control form-control-sm" rows="2" placeholder="Add optional note for faculty grader..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-pro-primary btn-sm w-100 fw-bold">
+                        📤 Complete File Submission
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Nav Tab Switching for Student Dashboard
+    var navLinks = document.querySelectorAll('#studentDashNav a[data-bs-toggle="tab"]');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            navLinks.forEach(function(l) {
+                l.classList.remove('active');
+                var target = document.querySelector(l.getAttribute('href'));
+                if (target) target.classList.remove('show', 'active');
+            });
+            this.classList.add('active');
+            var activeTarget = document.querySelector(this.getAttribute('href'));
+            if (activeTarget) activeTarget.classList.add('show', 'active');
+        });
+    });
+
+    // File Submission Form Simulation
+    var submitForm = document.getElementById('studentFileSubmitForm');
+    if (submitForm) {
+        submitForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Assignment file successfully submitted to course faculty!');
+            var modalEl = document.getElementById('studentFileSubmitModal');
+            if (window.bootstrap && bootstrap.Modal) {
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+            }
+            submitForm.reset();
+        });
+    }
+});
+
+function openSubmitModal(title) {
+    var modalTitle = document.getElementById('modalAssignmentTitle');
+    if (modalTitle) modalTitle.innerText = 'Submit File: ' + title;
+    var modalEl = document.getElementById('studentFileSubmitModal');
+    if (window.bootstrap && bootstrap.Modal) {
+        var modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    } else {
+        alert('File upload dialog for: ' + title);
+    }
+}
+</script>
